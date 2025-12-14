@@ -83,7 +83,7 @@ int main(int, char**) {
         };
 
         ImGui::Begin("D-Pad demo");
-        ImVec2 center = ImGui::GetCursorScreenPos() + ImVec2(r[2], r[2]);
+        ImVec2 center = ImGui::GetCursorScreenPos() + ImVec2(r[2] + spacer, r[2] + spacer);
 
         ImGui::ImGuiDPadDirection dirs[3];
         for (int i = 0; i < 3; ++i) {
