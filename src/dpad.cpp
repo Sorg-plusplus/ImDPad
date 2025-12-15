@@ -64,13 +64,13 @@ namespace ImGui {
     ImGuiDPadDirection ImGuiDPad(const char* id, float r0, float r1, float offset, bool slice, ImVec2 center) {
         ImVector<ImVec2> pts;
 
-        float sector = 45.f;
-        struct Slice { ImGuiDPadDirection dir; float a0, a1; const char* name; };
+        float sector = 45.f * M_PI180;
+        struct Slice { ImGuiDPadDirection dir; float a; const char* name; };
         const Slice slices[] = {
-            { Right, (0.f - sector) * M_PI180, (0.f + sector) * M_PI180, "_right" },
-            { Down,  (90.f - sector) * M_PI180, (90.f + sector) * M_PI180, "_down" },
-            { Left,  (180.f - sector) * M_PI180, (180.f + sector) * M_PI180, "_left" },
-            { Up,    (270.f - sector) * M_PI180, (270.f + sector) * M_PI180, "_up" }
+            { Right, 0.f,          "_right" },
+            { Down,  IM_PI * 0.5f, "_down" },
+            { Left,  IM_PI,        "_left" },
+            { Up,    IM_PI * 1.5f, "_up" }
         };
 
         bool conc = center.x == FLT_MAX && center.y == FLT_MAX;
@@ -78,7 +78,7 @@ namespace ImGui {
 
         ImGuiDPadDirection result = None;
         for (auto& s : slices) {
-            ringSlice(pts, center, r0 + offset, r1, s.a0, s.a1, offset / sqrtf(2.f), slice);
+            ringSlice(pts, center, r0 + offset, r1, s.a - sector, s.a + sector, offset / sqrtf(2.f), slice);
             if (ringButton((std::string(id) + s.name).c_str(), pts.Data, pts.Size))
                 result = s.dir;
         }
@@ -87,3 +87,4 @@ namespace ImGui {
         return result;
     }
 }
+
